@@ -1,0 +1,46 @@
+{
+  "geos": {
+    "DE": {
+      "estimated_lift_pp": 2.795,
+      "true_lift_pp": 2.8,
+      "ci_lo": 2.727,
+      "ci_hi": 2.967,
+      "p_value": 0.0,
+      "pre_rmse": 0.1453,
+      "incremental_installs": 2029348,
+      "total_spend": 2187214,
+      "cpi": 1.08
+    },
+    "FR": {
+      "estimated_lift_pp": 2.053,
+      "true_lift_pp": 2.1,
+      "ci_lo": 1.891,
+      "ci_hi": 2.111,
+      "p_value": 0.0,
+      "pre_rmse": 0.1037,
+      "incremental_installs": 1170280,
+      "total_spend": 1789982,
+      "cpi": 1.53
+    },
+    "PL": {
+      "estimated_lift_pp": 3.06,
+      "true_lift_pp": 3.2,
+      "ci_lo": 2.912,
+      "ci_hi": 3.105,
+      "p_value": 0.0,
+      "pre_rmse": 0.3528,
+      "incremental_installs": 933335,
+      "total_spend": 1457429,
+      "cpi": 1.56
+    }
+  },
+  "xgboost": {
+    "rmse": 0.0795,
+    "r2": 0.9974
+  },
+  "shap_top_features": [
+    "pre_baseline",
+    "broadband_pct",
+    "campaign_spend_usd"
+  ]
+}
