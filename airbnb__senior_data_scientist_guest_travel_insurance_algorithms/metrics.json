@@ -1,0 +1,17 @@
+{
+  "lr_roc_auc": 0.626,
+  "lr_pr_auc": 0.3356,
+  "xgb_raw_roc_auc": 0.6066,
+  "xgb_raw_pr_auc": 0.2973,
+  "xgb_calib_roc_auc": 0.6295,
+  "xgb_calib_pr_auc": 0.3244,
+  "brier_raw": 0.2347,
+  "brier_calibrated": 0.1626,
+  "optimal_threshold": 0.23,
+  "f1_at_optimal": 0.4147,
+  "top_decile_lift": 1.64,
+  "n_features": 13,
+  "train_n": 1589,
+  "test_n": 398,
+  "positive_rate_test": 0.2136
+}
