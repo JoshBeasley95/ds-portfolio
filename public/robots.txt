@@ -1,0 +1,3 @@
+# Unlisted host for per-application case studies — keep it out of search entirely.
+User-agent: *
+Disallow: /

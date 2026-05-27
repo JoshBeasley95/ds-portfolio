@@ -1,48 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-
-const projects = (await getCollection('projects')).sort(
-  (a, b) => +new Date(b.data.date) - +new Date(a.data.date)
-);
-const featured = projects.slice(0, 3);
+// Deliberately does NOT enumerate the generated case studies — this site is an unlisted
+// host. Each study is reached only via its direct link (application Website field / LinkedIn).
+// The curated personal-brand site lives elsewhere.
 ---
 <BaseLayout title="Joshua Beasley">
   <section class="hero">
     <h1>Joshua Beasley</h1>
-    <p class="tagline">AI-driven data scientist turning predictive modeling and custom automation into measurable revenue impact.</p>
+    <p class="tagline">Applied data-science case studies.</p>
     <p>
-      Data scientist with 5+ years building end-to-end analytical and automation systems across
-      cybersecurity and marketing/GTM analytics — XGBoost forecasting models, Streamlit decision
-      apps, an MLOps framework, and AI-agent tooling that gets adopted by leadership and drives
-      real dollar decisions. Each project below is a runnable, end-to-end demonstration built on
-      public or synthetic data.
+      This is a working space for hands-on, end-to-end data-science case studies — each a
+      runnable demonstration (EDA → model → evaluation → explainability) built on public or
+      synthetic data. The code for every study lives on GitHub.
     </p>
     <div class="hero-links">
-      <a class="btn btn-primary" href="/projects">View projects</a>
-      <a class="btn" href="https://github.com/JoshBeasley95" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://github.com/JoshBeasley95/ds-portfolio" target="_blank" rel="noopener">Code on GitHub</a>
       <a class="btn" href="https://www.linkedin.com/in/joshuabeasley/" target="_blank" rel="noopener">LinkedIn</a>
       <a class="btn" href="mailto:texasjmb@gmail.com">Email</a>
     </div>
   </section>
-
-  {featured.length > 0 && (
-    <section class="section">
-      <h2 class="section-title">Featured projects</h2>
-      <div class="project-grid">
-        {featured.map((p) => (
-          <ProjectCard
-            slug={p.id}
-            title={p.data.title}
-            company={p.data.company}
-            role={p.data.role}
-            date={p.data.date}
-            summary={p.data.summary}
-            tags={p.data.tags}
-          />
-        ))}
-      </div>
-    </section>
-  )}
 </BaseLayout>

@@ -15,6 +15,9 @@ const fullTitle = title === 'Joshua Beasley' ? title : `${title} · Joshua Beasl
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- This is the unlisted host for per-application case studies: pages work when linked
+         directly (Website field / LinkedIn) but are never indexed or browsable as a pile. -->
+    <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
