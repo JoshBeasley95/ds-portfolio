@@ -1,0 +1,23 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  company?: string;
+  role?: string;
+  date: string;
+  summary: string;
+  tags?: string[];
+}
+const { slug, title, company, role, date, summary, tags = [] } = Astro.props;
+const sub = [company, role].filter(Boolean).join(' · ');
+---
+<a class="project-card" href={`/projects/${slug}`}>
+  <h3>{title}</h3>
+  <div class="meta">{sub}{sub && ' · '}{date}</div>
+  <p class="summary">{summary}</p>
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.slice(0, 6).map((t) => <span class="tag">{t}</span>)}
+    </div>
+  )}
+</a>

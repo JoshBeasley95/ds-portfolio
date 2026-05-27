@@ -1,8 +1,17 @@
+# astro / node build + deps
+node_modules/
+dist/
+.astro/
+.vercel/
+
+# python build artifacts inside project subfolders
 .venv/
 venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# misc
 .DS_Store
 *.csv.gz
 data_cache/

@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, company, role, date, summary } = project.data;
+const sub = [company, role].filter(Boolean).join(' · ');
+const ghBase = 'https://github.com/JoshBeasley95/ds-portfolio/tree/main/projects';
+---
+<BaseLayout title={title} description={summary}>
+  <article class="prose">
+    <p class="post-meta">
+      {sub}{sub && ' · '}{date} ·
+      <a href={`${ghBase}/${project.id}`} target="_blank" rel="noopener">code on GitHub</a>
+    </p>
+    <Content />
+    <a class="back-link" href="/projects">← All projects</a>
+  </article>
+</BaseLayout>
