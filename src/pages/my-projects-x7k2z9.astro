@@ -1,0 +1,39 @@
+---
+// PRIVATE project index. Obscure path, not linked from anywhere, noindex (via BaseLayout) +
+// robots Disallow — reachable only by knowing this URL. For Josh's own review; recruiters who
+// land on a single project page can't discover this or the other projects.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => +new Date(b.data.date) - +new Date(a.data.date)
+);
+---
+<BaseLayout title="All Projects (private)">
+  <section class="section" style="padding-top:48px;">
+    <h1 class="section-title" style="font-size:2rem;">All projects <span style="color:var(--muted);font-weight:400;font-size:1rem;">· private index</span></h1>
+    <p style="color:var(--muted); margin-bottom:24px;">
+      {projects.length} project{projects.length === 1 ? '' : 's'}. This page is unlisted and
+      noindexed — for your eyes only; share individual project links, not this one.
+    </p>
+    {projects.length === 0 ? (
+      <p style="color:var(--muted);">No projects yet.</p>
+    ) : (
+      <div class="project-grid">
+        {projects.map((p) => {
+          const sub = [p.data.company, p.data.role].filter(Boolean).join(' · ');
+          return (
+            <a class="project-card" href={`/projects/${p.id}`}>
+              <h3>{p.data.title}</h3>
+              <div class="meta">{sub}{sub && ' · '}{p.data.date}</div>
+              <p class="summary">{p.data.summary}</p>
+              {p.data.tags.length > 0 && (
+                <div class="tags">{p.data.tags.slice(0, 6).map((t) => <span class="tag">{t}</span>)}</div>
+              )}
+            </a>
+          );
+        })}
+      </div>
+    )}
+  </section>
+</BaseLayout>
