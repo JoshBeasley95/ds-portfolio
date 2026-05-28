@@ -1,0 +1,17 @@
+{
+  "roc_auc": 0.9818181447161407,
+  "pr_auc": 0.9222700156277597,
+  "best_f1": 0.9206349206349207,
+  "best_threshold": 0.8274874371859297,
+  "precision_at_thresh": 0.9560439560439561,
+  "recall_at_thresh": 0.8877551020408163,
+  "tp": 87,
+  "fp": 4,
+  "fn": 11,
+  "tn": 9997,
+  "n_train": 40393,
+  "n_test": 10099,
+  "fraud_rate_test": 0.009703931082285375,
+  "top_shap_feature": "v14",
+  "data_source": "OpenML Credit Card Fraud (ULB, public domain)"
+}
