@@ -1,0 +1,59 @@
+{
+  "n_users": 5000,
+  "overall_conversion_rate": 0.3374,
+  "email_treatment_rate": 0.5882,
+  "segments": {
+    "0": {
+      "label": "Low-Activity New",
+      "n": 1566,
+      "avg_sessions": 6.522,
+      "avg_messages": 63.498,
+      "avg_tenure": 69.064,
+      "conversion_rate": 0.198
+    },
+    "1": {
+      "label": "Moderate Users",
+      "n": 1627,
+      "avg_sessions": 6.934,
+      "avg_messages": 64.405,
+      "avg_tenure": 20.081,
+      "conversion_rate": 0.293
+    },
+    "3": {
+      "label": "Engaged Tenured",
+      "n": 891,
+      "avg_sessions": 7.887,
+      "avg_messages": 132.393,
+      "avg_tenure": 46.74,
+      "conversion_rate": 0.356
+    },
+    "2": {
+      "label": "Power Users",
+      "n": 916,
+      "avg_sessions": 18.611,
+      "avg_messages": 70.27,
+      "avg_tenure": 45.774,
+      "conversion_rate": 0.636
+    }
+  },
+  "propensity_auroc": 0.6391,
+  "naive_ate": 0.1591,
+  "matched_ate": 0.0768,
+  "propensity_n_treated": 2941,
+  "propensity_n_control": 2941,
+  "xgb_cv_auroc": 0.7979,
+  "xgb_cv_auprc": 0.7128,
+  "shap_top_features": {
+    "Sessions (14d)": 0.8048999905586243,
+    "Plan: Pro": 0.3260999917984009,
+    "Days Since Signup": 0.2529999911785126,
+    "Messages Sent": 0.24619999527931213,
+    "Email Received": 0.19859999418258667
+  },
+  "lift_by_segment": {
+    "Power Users": 0.09149999916553497,
+    "Engaged Tenured": 0.06669999659061432,
+    "Moderate Users": 0.06639999896287918,
+    "Low-Activity New": 0.05920000001788139
+  }
+}
