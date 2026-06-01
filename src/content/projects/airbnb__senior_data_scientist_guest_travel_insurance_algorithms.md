@@ -4,21 +4,21 @@ company: "Airbnb"
 role: "Senior Data Scientist, Guest Travel Insurance (Algorithms)"
 date: "2026-05-27"
 tags:
-  - XGBoost
-  - SHAP
-  - Propensity Modeling
-  - Calibration
-  - Travel Insurance
-  - Scikit-Learn
-  - Feature Engineering
-  - Threshold Optimization
-  - Python
-  - Streamlit
+ - XGBoost
+ - SHAP
+ - Propensity Modeling
+ - Calibration
+ - Travel Insurance
+ - Scikit-Learn
+ - Feature Engineering
+ - Threshold Optimization
+ - Python
+ - Streamlit
 summary: >
-  Built a calibrated XGBoost propensity model that predicts which guests are likely to purchase
-  travel insurance, using engineered booking signals, isotonic calibration, SHAP explainability,
-  and threshold optimisation — directly mirroring the ML work Airbnb's GTI Algorithms team
-  applies to real AirCover coverage decisions.
+ Built a calibrated XGBoost propensity model that predicts which guests are likely to purchase
+ travel insurance, using engineered booking signals, isotonic calibration, SHAP explainability,
+ and threshold optimisation, directly mirroring the ML work Airbnb's GTI Algorithms team
+ applies to real AirCover coverage decisions.
 ---
 
 > **Data disclaimer:** All results below were produced on **fully synthetic data** (1,987 rows)
@@ -30,7 +30,7 @@ summary: >
 ## The Problem: Showing the Right Insurance Offer at the Right Moment
 
 Every time a guest completes a booking on Airbnb, there's a fleeting window to offer them
-travel protection — a flight cancellation refund, a trip interruption guarantee, or emergency
+travel protection, a flight cancellation refund, a trip interruption guarantee, or emergency
 medical cover under AirCover. Surface the offer to the right guest and you drive meaningful
 uptake. Surface it to the wrong guest at the wrong moment and you degrade trust, inflate
 complaint rates, and waste prime checkout real estate.
@@ -53,7 +53,7 @@ Travel Insurance Prediction Dataset. Key attributes include:
 - **Travel behaviour:** FrequentFlyer, EverTravelledAbroad
 - **Target:** TravelInsurance (1 = purchased, 0 = did not)
 
-The dataset is **class-imbalanced at ~21 % positive rate** — realistic for an opt-in insurance
+The dataset is **class-imbalanced at ~21 % positive rate**, realistic for an opt-in insurance
 offer in a consumer travel context.
 
 ---
@@ -68,17 +68,17 @@ that a product analyst would reason about intuitively:
 | `IncomeBucket` | Quintile bin of AnnualIncome | Discretises wealth tier for monotone effects |
 | `TripRiskScore` | Weighted sum: chronic × 0.35 + abroad × 0.25 + FF × 0.20 + family_size × 0.20 | Composite exposure score |
 | `Income_FF` | AnnualIncome × FrequentFlyer / 1e6 | High-income frequent travellers: premium segment |
-| `AgeGroup` | Cut into 4 bins (<25, 25–35, 35–45, 45+) | Non-linear age effects |
+| `AgeGroup` | Cut into 4 bins (<25, 25, 35, 35, 45, 45+) | Non-linear age effects |
 | `HighDependents` | FamilyMembers ≥ 6 | Flag for guests with large families to protect |
 
 ---
 
 ## Modelling Pipeline
 
-### Step 1: Baseline — Logistic Regression
+### Step 1: Baseline, Logistic Regression
 
 A class-balanced logistic regression (C = 0.5, `class_weight=balanced`) establishes the floor.
-It achieves **ROC-AUC 0.6260** on the held-out 20 % test set — a useful ceiling check showing
+It achieves **ROC-AUC 0.6260** on the held-out 20 % test set, a useful ceiling check showing
 that linear separability is modest and a tree-based model should add value.
 
 ### Step 2: XGBoost + GridSearchCV
@@ -110,7 +110,7 @@ Raw XGBoost probabilities are frequently miscalibrated, particularly in imbalanc
 | Brier Score | 0.2347 | **0.1626** |
 
 A **30.7 % reduction in Brier score** means the model's probabilities now behave as true
-frequencies — essential for any downstream pricing or ranked-surfacing system.
+frequencies, essential for any downstream pricing or ranked-surfacing system.
 
 ![Calibration curve and threshold sweep](/projects/airbnb__senior_data_scientist_guest_travel_insurance_algorithms/charts/05_calibration_threshold.png)
 
@@ -127,7 +127,7 @@ identifies the optimal decision threshold.
 ![ROC curve](/projects/airbnb__senior_data_scientist_guest_travel_insurance_algorithms/charts/03_roc_curve.png)
 
 The calibrated XGBoost achieves **ROC-AUC 0.6295**, beating the logistic regression baseline
-on both ROC-AUC (0.6260) and PR-AUC (0.3244 vs. 0.3356 LR — comparable). 
+on both ROC-AUC (0.6260) and PR-AUC (0.3244 vs. 0.3356 LR, comparable). 
 
 ![PR curve](/projects/airbnb__senior_data_scientist_guest_travel_insurance_algorithms/charts/04_pr_curve.png)
 
@@ -140,7 +140,7 @@ In an insurance-offer context, the stakes of the two error types differ:
 - **False positive** (offer to uninterested guest): annoyance, potential trust erosion
 - **False negative** (miss a willing buyer): lost revenue
 
-The F1-maximising threshold is **0.23** — deliberately lower than 0.5, given the 21 % base
+The F1-maximising threshold is **0.23**, deliberately lower than 0.5, given the 21 % base
 rate. At this threshold:
 
 | Class | Precision | Recall | F1 |
@@ -149,7 +149,7 @@ rate. At this threshold:
 | Insurance | 0.34 | 0.53 | **0.41** |
 
 Product and revenue teams can shift this threshold up or down based on the unit economics
-of a false positive vs. a false negative — a straightforward dial in the scoring service.
+of a false positive vs. a false negative, a straightforward dial in the scoring service.
 
 ---
 
@@ -159,7 +159,7 @@ of a false positive vs. a false negative — a straightforward dial in the scori
 
 Score the test population, bin by decile, and compute uplift vs. the overall 21.4 % base rate:
 
-- **Top decile (score 90–100th percentile):** uptake rate ~35 %, lift **1.64×**
+- **Top decile (score 90, 100th percentile):** uptake rate ~35 %, lift **1.64×**
 - **Bottom decile:** uptake rate ~10 %, lift 0.47×
 
 This separation is the practical proof-of-concept: sorting guests by model score and targeting
@@ -173,25 +173,25 @@ the top 20 % would reach ~3× more insurance buyers per offer impression than ra
 
 TreeExplainer computes exact Shapley values in O(T·L) time for tree ensembles. Key findings:
 
-1. **EverTravelledAbroad** — the single strongest positive driver. Guests with international
-   travel history show dramatically higher insurance intent, likely because they've experienced
-   or heard about travel disruptions first-hand.
+1. **EverTravelledAbroad**, the single strongest positive driver. Guests with international
+ travel history show dramatically higher insurance intent, likely because they've experienced
+ or heard about travel disruptions first-hand.
 
-2. **AnnualIncome** — a smooth positive gradient: wealthier guests are more willing to pay
-   for protection (and less price-sensitive to the premium).
+2. **AnnualIncome**, a smooth positive gradient: wealthier guests are more willing to pay
+ for protection (and less price-sensitive to the premium).
 
-3. **TripRiskScore** — the engineered composite captures chronic health × travel frequency
-   × family size in a single feature that ranks third globally.
+3. **TripRiskScore**, the engineered composite captures chronic health × travel frequency
+ × family size in a single feature that ranks third globally.
 
-4. **FrequentFlyer** — frequent flyers have more to lose from disruption and more experience
-   purchasing insurance.
+4. **FrequentFlyer**, frequent flyers have more to lose from disruption and more experience
+ purchasing insurance.
 
-5. **Age** — modest positive slope; older guests trend toward higher uptake.
+5. **Age**, modest positive slope; older guests trend toward higher uptake.
 
 ![Per-guest SHAP waterfall](/projects/airbnb__senior_data_scientist_guest_travel_insurance_algorithms/charts/09_shap_waterfall.png)
 
 The waterfall plot shows exactly *why* the highest-intent guest in the test set received a
-high score — with signed contributions from each feature, traceable by any compliance
+high score, with signed contributions from each feature, traceable by any compliance
 or product reviewer.
 
 ---
@@ -200,7 +200,7 @@ or product reviewer.
 
 `app.py` provides a lightweight UI where any stakeholder can enter a hypothetical guest
 profile and receive:
-- A calibrated probability (0–100 %)
+- A calibrated probability (0, 100 %)
 - A three-tier intent classification (Low / Medium / High)
 - A surfacing recommendation ("show prominently", "soft nudge", "suppress")
 - Top-3 SHAP drivers with signed contributions
@@ -224,8 +224,7 @@ demonstrated here:
 | Surface signals from structured booking data | Feature engineering on 8 raw → 13 features |
 | End-to-end ML: EDA → model → deploy | Full pipeline + Streamlit app |
 
-The insurance intent problem sits at the intersection of personalisation, revenue, and trust —
-and it demands exactly the blend of predictive rigour, calibration care, and explainability
+The insurance intent problem sits at the intersection of personalisation, revenue, and trust, and it demands exactly the blend of predictive rigour, calibration care, and explainability
 that this project demonstrates.
 
 ---

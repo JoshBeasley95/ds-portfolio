@@ -4,29 +4,29 @@ company: "Mozilla"
 role: "Senior Marketing Data Scientist"
 date: "2026-05-27"
 tags:
-  - causal-inference
-  - synthetic-control
-  - geo-experiments
-  - incrementality
-  - firefox
-  - marketing-measurement
-  - xgboost
-  - shap
-  - privacy-first-analytics
+ - causal-inference
+ - synthetic-control
+ - geo-experiments
+ - incrementality
+ - firefox
+ - marketing-measurement
+ - xgboost
+ - shap
+ - privacy-first-analytics
 summary: >
-  A end-to-end demonstration of CausalImpact-style geo-experiment measurement using synthetic
-  control on a simulated 15-geo, 36-month browser market share panel. The model recovers
-  injected ground-truth lift (2.1–3.2 pp) within 0.15 pp across three treated European geos,
-  with p < 0.001 on permutation tests. Companion XGBoost + SHAP analysis surfaces campaign
-  spend, pre-campaign baseline, and broadband penetration as the dominant drivers of
-  post-campaign Firefox share.
+ A end-to-end demonstration of CausalImpact-style geo-experiment measurement using synthetic
+ control on a simulated 15-geo, 36-month browser market share panel. The model recovers
+ injected ground-truth lift (2.1, 3.2 pp) within 0.15 pp across three treated European geos,
+ with p < 0.001 on permutation tests. Companion XGBoost + SHAP analysis surfaces campaign
+ spend, pre-campaign baseline, and broadband penetration as the dominant drivers of
+ post-campaign Firefox share.
 ---
 
 ## The Measurement Problem Mozilla Actually Has
 
 Mozilla's marketing team operates in a structural headwind most brands don't face: they're
 selling a privacy browser to privacy-conscious users who are, by definition, harder to track.
-Last-click attribution — already a flawed fiction for most advertisers — is essentially
+Last-click attribution, already a flawed fiction for most advertisers, is essentially
 worthless in this context. Users who care about privacy block pixels, clear cookies, and route
 through VPNs. The very audience most likely to convert to Firefox is the one least likely to
 show up in a standard attribution model.
@@ -41,18 +41,18 @@ This project demonstrates that methodology from end to end.
 
 ## Data Setup
 
-All data is **fully synthetic** — generated in-code to model the structural properties of
+All data is **fully synthetic**, generated in-code to model the structural properties of
 real geo-level browser share data. The panel covers 15 European markets over 36 months
-(January 2022 – December 2024), with:
+(January 2022, December 2024), with:
 
 - **AR(1) + linear trend** baseline for each geo, calibrated to realistic Firefox share levels
-  (6–11% in Western/Northern Europe, consistent with publicly available estimates)
+ (6, 11% in Western/Northern Europe, consistent with publicly available estimates)
 - **Three treated geos** (Germany, France, Poland) receiving a simulated 12-month paid media
-  campaign starting January 2024
-- **Known ground-truth lift** injected: DE +2.8 pp, FR +2.1 pp, PL +3.2 pp — allowing
-  full validation of the methodology
+ campaign starting January 2024
+- **Known ground-truth lift** injected: DE +2.8 pp, FR +2.1 pp, PL +3.2 pp, allowing
+ full validation of the methodology
 
-The synthetic spend overlay ($120K–$180K/month per geo) is sized to be realistic for
+The synthetic spend overlay ($120K, $180K/month per geo) is sized to be realistic for
 a regional digital media campaign targeting browser downloads.
 
 ---
@@ -87,13 +87,13 @@ The post-period **gap between actual and synthetic** is our causal estimate of c
 
 The model recovered the injected ground-truth lift with high fidelity:
 
-| Geo | Estimated Lift | True Lift | Error  | 95% CI           |
+| Geo | Estimated Lift | True Lift | Error | 95% CI |
 |-----|---------------:|----------:|-------:|------------------|
-| DE  | **2.795 pp**   | 2.800 pp  | 0.005  | [2.727, 2.967]   |
-| FR  | **2.053 pp**   | 2.100 pp  | 0.047  | [1.891, 2.111]   |
-| PL  | **3.060 pp**   | 3.200 pp  | 0.140  | [2.912, 3.105]   |
+| DE | **2.795 pp** | 2.800 pp | 0.005 | [2.727, 2.967] |
+| FR | **2.053 pp** | 2.100 pp | 0.047 | [1.891, 2.111] |
+| PL | **3.060 pp** | 3.200 pp | 0.140 | [2.912, 3.105] |
 
-Maximum estimation error: **0.14 pp** — within one-tenth of a percentage point of ground truth.
+Maximum estimation error: **0.14 pp**, within one-tenth of a percentage point of ground truth.
 
 ![Cumulative Lift Curves](/projects/mozilla__senior_marketing_data_scientist/charts/03_cumulative_lift.png)
 
@@ -102,7 +102,7 @@ Maximum estimation error: **0.14 pp** — within one-tenth of a percentage point
 ## Placebo Tests: Statistical Rigor
 
 To build an empirical p-value without distributional assumptions, we ran the identical
-synthetic control procedure on each of the 12 control geos — treating each as if it were
+synthetic control procedure on each of the 12 control geos, treating each as if it were
 the "treated" unit. This produces a null distribution of lift estimates under the assumption
 of no true effect.
 
@@ -124,14 +124,14 @@ post-campaign Firefox share from geo-level features. SHAP values reveal which ch
 amplify or dampen campaign effectiveness:
 
 **Top drivers (mean |SHAP|):**
-1. **Pre-campaign baseline share** (0.646) — geos with stronger organic Firefox adoption
-   convert paid media more efficiently; the audience is already primed
-2. **Broadband penetration %** (0.324) — higher connectivity = more browsing = more
-   switching opportunities
-3. **Campaign spend** (0.302) — direct causal signal; spend elasticity is positive across
-   all treated geos
-4. **Population** (0.295) — larger markets capture more absolute volume even with smaller
-   share lifts
+1. **Pre-campaign baseline share** (0.646): geos with stronger organic Firefox adoption
+ convert paid media more efficiently; the audience is already primed
+2. **Broadband penetration %** (0.324): higher connectivity = more browsing = more
+ switching opportunities
+3. **Campaign spend** (0.302): direct causal signal; spend elasticity is positive across
+ all treated geos
+4. **Population** (0.295): larger markets capture more absolute volume even with smaller
+ share lifts
 
 ![SHAP Feature Importance](/projects/mozilla__senior_marketing_data_scientist/charts/05_shap_importance.png)
 
@@ -143,15 +143,15 @@ XGBoost companion model performance: **RMSE = 0.080 pp, R² = 0.997**
 
 Translating share-point lift into business language:
 
-| Geo | Lift (pp) | Est. Incremental Installs | Campaign Spend  | **Cost per Install** |
+| Geo | Lift (pp) | Est. Incremental Installs | Campaign Spend | **Cost per Install** |
 |-----|----------:|--------------------------:|----------------:|---------------------:|
-| DE  | 2.795     | ~2,029,000                | ~$2.19M         | **$1.08**            |
-| FR  | 2.053     | ~1,170,000                | ~$1.79M         | **$1.53**            |
-| PL  | 3.060     | ~933,000                  | ~$1.46M         | **$1.56**            |
+| DE | 2.795 | ~2,029,000 | ~$2.19M | **$1.08** |
+| FR | 2.053 | ~1,170,000 | ~$1.79M | **$1.53** |
+| PL | 3.060 | ~933,000 | ~$1.46M | **$1.56** |
 
 *Incremental installs estimated as lift_pp / 100 × geo internet user base (public Eurostat figures).*
 
-Germany delivers the strongest absolute ROI at **$1.08 CPI** — driven by high internet user
+Germany delivers the strongest absolute ROI at **$1.08 CPI**, driven by high internet user
 volume and strong lift. Poland shows the highest *percentage* lift (+3.06 pp relative to a
 7.8% baseline), suggesting the market is highly responsive to paid media stimulus: lower
 Firefox saturation means more headroom for growth.

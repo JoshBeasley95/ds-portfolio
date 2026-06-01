@@ -1,18 +1,18 @@
 ---
 title: "Neighborhood Trust Score: Detecting Fake Account Registrations on a Local Social Network"
 company: "Nextdoor"
-role: "Senior Data Scientist – Fraud Prevention"
+role: "Senior Data Scientist, Fraud Prevention"
 date: "2026-05-28"
 tags:
-  - fraud-detection
-  - xgboost
-  - shap
-  - smote
-  - class-imbalance
-  - interpretable-ml
-  - account-integrity
-  - streamlit
-summary: "An end-to-end fraud-detection pipeline — XGBoost + SMOTE + SHAP — framed around account-integrity challenges at a local social network. Achieves ROC-AUC 0.9818 and PR-AUC 0.9223 with per-account SHAP waterfall explanations. Built on the public ULB Credit Card Fraud dataset as a synthetic proxy."
+ - fraud-detection
+ - xgboost
+ - shap
+ - smote
+ - class-imbalance
+ - interpretable-ml
+ - account-integrity
+ - streamlit
+summary: "An end-to-end fraud-detection pipeline, XGBoost + SMOTE + SHAP, framed around account-integrity challenges at a local social network. Achieves ROC-AUC 0.9818 and PR-AUC 0.9223 with per-account SHAP waterfall explanations. Built on the public ULB Credit Card Fraud dataset as a synthetic proxy."
 ---
 
 > **Data notice:** This project uses the public-domain
@@ -24,20 +24,20 @@ summary: "An end-to-end fraud-detection pipeline — XGBoost + SMOTE + SHAP — 
 
 ## The Problem: When Fake Neighbors Erode Real Trust
 
-Nextdoor's product premise is deceptively simple — a neighborhood is only as valuable
+Nextdoor's product premise is deceptively simple, a neighborhood is only as valuable
 as the trust between the people in it. But that trust has a predator: fake accounts.
 Fraudulent registrations enable spam campaigns, coordinated misinformation, fake
-reviews of local businesses, and — at their worst — social-engineering attacks
+reviews of local businesses, and, at their worst, social-engineering attacks
 targeting vulnerable community members.
 
 For a Trust & Safety data scientist at Nextdoor, the core challenge is catching these
 accounts **at registration**, before they ever interact with real neighbors.
 That requires a model that is:
 
-1. **High-recall** — catch the majority of bad actors
-2. **High-precision** — minimize false alarms that waste analyst time
-3. **Interpretable** — give reviewers actionable reasons, not black-box scores
-4. **Threshold-tunable** — adjust the operating point as capacity changes
+1. **High-recall**, catch the majority of bad actors
+2. **High-precision**, minimize false alarms that waste analyst time
+3. **Interpretable**, give reviewers actionable reasons, not black-box scores
+4. **Threshold-tunable**, adjust the operating point as capacity changes
 
 This project demonstrates exactly that stack on a public proxy dataset.
 
@@ -47,8 +47,8 @@ This project demonstrates exactly that stack on a public proxy dataset.
 
 The ULB Credit Card Fraud Detection dataset (284,807 records; 492 fraud; 0.17% positive
 rate) is one of the most studied imbalanced-class benchmarks in the field.
-Its 28 PCA-anonymized features (V1–V28) stand in for the behavioral signals that a
-real account-integrity system would collect at registration time — device fingerprints,
+Its 28 PCA-anonymized features (V1, V28) stand in for the behavioral signals that a
+real account-integrity system would collect at registration time, device fingerprints,
 IP reputation scores, typing velocity, form-completion patterns, etc.
 
 For this demo I subsampled to **50,492 records** (all 492 fraud + 50,000 legitimate)
@@ -63,7 +63,7 @@ Class distribution:
 ![Class distribution and log-Amount histograms](/projects/nextdoor__senior_data_scientist_fraud_prevention/charts/class_imbalance.png)
 
 The log-Amount distribution (right panel) shows a meaningful shape difference between
-classes — fraud tends to cluster at specific amount ranges — a pattern that informs
+classes, fraud tends to cluster at specific amount ranges, a pattern that informs
 our feature engineering.
 
 ---
@@ -74,10 +74,10 @@ Raw PCA components are already normalized, but we can add domain-informed featur
 
 | Feature | Engineering logic |
 |---------|------------------|
-| `log_amount` | `log(amount + 1)` — corrects right skew, stabilizes gradient updates |
-| `sin_hour` / `cos_hour` | Cyclical encoding of hour-of-day — captures off-hours registration bursts |
-| `amount_bucket` | Decile bin of transaction amount — velocity proxy |
-| `amount_zscore` | Population z-score — flags statistically unusual amounts |
+| `log_amount` | `log(amount + 1)`, corrects right skew, stabilizes gradient updates |
+| `sin_hour` / `cos_hour` | Cyclical encoding of hour-of-day, captures off-hours registration bursts |
+| `amount_bucket` | Decile bin of transaction amount, velocity proxy |
+| `amount_zscore` | Population z-score, flags statistically unusual amounts |
 
 In a production Nextdoor system these would expand to: account age at action,
 registration-to-action latency, device-ID collision rate across registrations,
@@ -143,7 +143,7 @@ threshold depends on analyst capacity, not a fixed 0.5 default.
 
 The ROC curve (AUC=0.9818) confirms strong global discrimination.
 The PR curve (AUCPR=0.9223) is the more operationally honest metric for this
-imbalanced problem — the gold dot marks the selected operating point.
+imbalanced problem, the gold dot marks the selected operating point.
 
 In production terms: if Nextdoor received 10,000 account registrations per day
 with this fraud rate, the model would:
@@ -161,10 +161,10 @@ A reviewer who sees "fraud score: 0.94" needs to know *why* to act confidently.
 
 ### Global: Which Signals Matter Most?
 
-![SHAP beeswarm summary — top 15 fraud drivers](/projects/nextdoor__senior_data_scientist_fraud_prevention/charts/shap_summary.png)
+![SHAP beeswarm summary, top 15 fraud drivers](/projects/nextdoor__senior_data_scientist_fraud_prevention/charts/shap_summary.png)
 
 The beeswarm shows each test record as a dot, colored by feature value.
-`V14`, `V4`, `V11`, and `V12` dominate — these PCA components likely capture
+`V14`, `V4`, `V11`, and `V12` dominate, these PCA components likely capture
 anomalous authorization patterns in the original card-fraud domain, mapping
 conceptually to irregular behavioral fingerprints in account registration.
 
@@ -172,10 +172,10 @@ conceptually to irregular behavioral fingerprints in account registration.
 
 ### Local: Why Was This Specific Account Flagged?
 
-![SHAP waterfall — highest-risk account](/projects/nextdoor__senior_data_scientist_fraud_prevention/charts/shap_waterfall_example.png)
+![SHAP waterfall, highest-risk account](/projects/nextdoor__senior_data_scientist_fraud_prevention/charts/shap_waterfall_example.png)
 
 The waterfall plot decomposes a single high-risk account's score into individual
-feature contributions — starting from the baseline log-odds and stacking each
+feature contributions, starting from the baseline log-odds and stacking each
 signal's push toward fraud (red) or away from it (blue).
 This is exactly what a Nextdoor trust-and-safety reviewer would see in a
 fraud-review queue: not just "suspicious," but "suspicious because V14 is 3.2σ
@@ -205,7 +205,7 @@ streamlit run app.py
 | Minimize analyst false-alarm fatigue | 95.6% precision → ~1 false alarm per 24 flagged accounts |
 | Audit every automated decision | SHAP waterfall → each flag is fully explainable |
 | Adapt to evolving fraud patterns | Threshold dial + model retraining pipeline |
-| Scale without proportional headcount | Risk queue surfaces top 1–5% of registrations |
+| Scale without proportional headcount | Risk queue surfaces top 1, 5% of registrations |
 
 The broader signal: a fraud-prevention data scientist at Nextdoor who can connect
 anomaly signals → interpretable scores → operational reviewer workflows → measurable
